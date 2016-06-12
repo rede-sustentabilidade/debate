@@ -29,9 +29,9 @@ nova:base-styles
 nova:base-routes
 nova:email-templates
 
-accounts-password
-accounts-twitter
-# accounts-facebook
+# accounts-password
+# accounts-twitter
+accounts-rs
 
 ############ Debug Packages ############
 
@@ -40,4 +40,5 @@ nova:debug
 ############ Your Packages ############
 
 # uncomment to activate example custom package
-# my-custom-package
+my-custom-package
+service-configuration
