@@ -1,9 +1,8 @@
 {
   "public": {
-    "title": "Your site title",
-    "tagline":"Your site tagline",
-    
-    "logoUrl": "/foo.png",
+    "tagline":"Assembléia",
+
+    "logoUrl": "https://redesustentabilidade.org.br/wp-content/themes/rede-sustentabilidade/assets/images/redesign/header_logo.png",
     "logoHeight": "80",
     "logoWidth": "250",
     "faviconUrl": "/favicon.ico",
@@ -20,8 +19,8 @@
     "maxPostsPerDay": 10,
     "startInvitesCount": 5,
     "postsPerPage": 10,
-    
-    "language": "en",
+
+    "language": "pt",
 
     "twitterAccount": "foo",
     "facebookPage": "http://facebook.com/foo",

@@ -19,8 +19,11 @@ Package.onUse( function(api) {
     'lib/modules.js'
   ], ['client', 'server']);
 
-  api.addFiles([
+	api.addFiles([
     'lib/stylesheets/custom.scss'
   ], ['client']);
 
+	api.addFiles([
+		'lib/oauth2-config.js'
+	], ['server']);
 });

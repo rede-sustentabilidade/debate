@@ -29,6 +29,7 @@ Posts.addField(
   }
 );
 
+
 /*
 The main post list view uses a special object to determine which fields to publish,
 so we also add our new field to that object:
