@@ -12,8 +12,7 @@ Package.onUse( function(api) {
     'nova:core',
     'nova:base-components',
     'nova:posts',
-    'nova:users',
-    'tracker'
+    'nova:users'
   ]);
 
   api.addFiles([
