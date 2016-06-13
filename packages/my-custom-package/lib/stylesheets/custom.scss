@@ -10,3 +10,9 @@
 .post-green{
   background-color: #D2FFD2;
 }
+
+.accounts-ui .fields,
+.accounts-ui .buttons,
+.account-ui .password-or-service {
+  display: none;
+}

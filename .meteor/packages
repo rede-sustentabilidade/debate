@@ -29,7 +29,7 @@ nova:base-styles
 nova:base-routes
 nova:email-templates
 
-# accounts-password
+accounts-password
 # accounts-twitter
 accounts-rs
 
