@@ -58,16 +58,16 @@ Rs.requestCredential = function (options, credentialRequestCompleteCallback) {
     loginUrlParameters.login_hint = options.loginHint;
   }
 
-  var loginStyle = OAuth._loginStyle('google', config, options);
+  var loginStyle = OAuth._loginStyle('rs', config, options);
   // https://developers.google.com/accounts/docs/OAuth2WebServer#formingtheurl
   _.extend(loginUrlParameters, {
     "response_type": "code",
     "client_id":  config.clientId,
     "scope": scope.join(' '), // space delimited
-    "redirect_uri": OAuth._redirectUri('google', config),
+    "redirect_uri": OAuth._redirectUri('rs', config),
     "state": OAuth._stateParam(loginStyle, credentialToken, options.redirectUrl)
   });
-  var loginUrl = 'https://accounts.google.com/o/oauth2/auth?' +
+  var loginUrl = 'http://passaporte.redesustentabilidade.org.br/oauth/authorization?' +
     _.map(loginUrlParameters, function(value, param){
       return encodeURIComponent(param) + '=' + encodeURIComponent(value);
     }).join("&");
