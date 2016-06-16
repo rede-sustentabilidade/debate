@@ -1,8 +1,9 @@
 Rs = {};
 
 // https://developers.google.com/accounts/docs/OAuth2Login#userinfocall
-Rs.whitelistedFields = ['id', 'email', 'verified_email', 'name', 'given_name',
-                   'family_name', 'picture', 'locale', 'timezone', 'gender'];
+// Rs.whitelistedFields = ['id', 'email', 'verified_email', 'name', 'given_name',
+//                    'family_name', 'picture', 'locale', 'timezone', 'gender'];
+Rs.whitelistedFields = ['id', 'username'];
 
 
 OAuth.registerService('rs', 2, null, function(query) {
@@ -11,14 +12,14 @@ OAuth.registerService('rs', 2, null, function(query) {
   var expiresAt = (+new Date) + (1000 * parseInt(response.expiresIn, 10));
   var accessToken = response.accessToken;
   var idToken = response.idToken;
-  var scopes = getScopes(accessToken);
+  //var scopes = getScopes(accessToken);
   var identity = getIdentity(accessToken);
 
   var serviceData = {
     accessToken: accessToken,
     idToken: idToken,
-    expiresAt: expiresAt,
-    scope: scopes
+    expiresAt: expiresAt
+    // scope: scopes
   };
 
   var fields = _.pick(identity, Rs.whitelistedFields);
@@ -32,7 +33,7 @@ OAuth.registerService('rs', 2, null, function(query) {
 
   return {
     serviceData: serviceData,
-    options: {profile: {name: identity.name}}
+    options: {profile: {email: identity.username}}
   };
 });
 
@@ -48,7 +49,7 @@ var getTokens = function (query) {
   var response;
   try {
     response = HTTP.post(
-      "https://accounts.google.com/o/oauth2/token", {params: {
+      "https://passaporte.redesustentabilidade.net/oauth/token", {params: {
         code: query.code,
         client_id: config.clientId,
         client_secret: OAuth.openSecret(config.secret),
@@ -56,12 +57,12 @@ var getTokens = function (query) {
         grant_type: 'authorization_code'
       }});
   } catch (err) {
-    throw _.extend(new Error("Failed to complete OAuth handshake with Google. " + err.message),
+    throw _.extend(new Error("Failed to complete OAuth handshake with Rs. " + err.message),
                    {response: err.response});
   }
 
   if (response.data.error) { // if the http response was a json object with an error attribute
-    throw new Error("Failed to complete OAuth handshake with Google. " + response.data.error);
+    throw new Error("Failed to complete OAuth handshake with Rs. " + response.data.error);
   } else {
     return {
       accessToken: response.data.access_token,
@@ -75,24 +76,24 @@ var getTokens = function (query) {
 var getIdentity = function (accessToken) {
   try {
     return HTTP.get(
-      "https://www.googleapis.com/oauth2/v1/userinfo",
+      "https://passaporte.redesustentabilidade.net/user",
       {params: {access_token: accessToken}}).data;
   } catch (err) {
-    throw _.extend(new Error("Failed to fetch identity from Google. " + err.message),
+    throw _.extend(new Error("Failed to fetch identity from Rs. " + err.message),
                    {response: err.response});
   }
 };
 
-var getScopes = function (accessToken) {
-  try {
-    return HTTP.get(
-      "https://www.googleapis.com/oauth2/v1/tokeninfo",
-      {params: {access_token: accessToken}}).data.scope.split(' ');
-  } catch (err) {
-    throw _.extend(new Error("Failed to fetch tokeninfo from Google. " + err.message),
-                   {response: err.response});
-  }
-};
+// var getScopes = function (accessToken) {
+//   try {
+//     return HTTP.get(
+//       "https://www.googleapis.com/oauth2/v1/tokeninfo",
+//       {params: {access_token: accessToken}}).data.scope.split(' ');
+//   } catch (err) {
+//     throw _.extend(new Error("Failed to fetch tokeninfo from Rs. " + err.message),
+//                    {response: err.response});
+//   }
+// };
 
 Rs.retrieveCredential = function(credentialToken, credentialSecret) {
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
