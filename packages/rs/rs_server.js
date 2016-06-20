@@ -1,9 +1,8 @@
 Rs = {};
 
 // https://developers.google.com/accounts/docs/OAuth2Login#userinfocall
-// Rs.whitelistedFields = ['id', 'email', 'verified_email', 'name', 'given_name',
-//                    'family_name', 'picture', 'locale', 'timezone', 'gender'];
-Rs.whitelistedFields = ['id', 'username'];
+Rs.whitelistedFields = ['id', 'email', 'verified_email', 'name', 'given_name',
+                   'family_name', 'picture', 'locale', 'timezone', 'gender'];
 
 
 OAuth.registerService('rs', 2, null, function(query) {
@@ -12,14 +11,14 @@ OAuth.registerService('rs', 2, null, function(query) {
   var expiresAt = (+new Date) + (1000 * parseInt(response.expiresIn, 10));
   var accessToken = response.accessToken;
   var idToken = response.idToken;
-  //var scopes = getScopes(accessToken);
+  var scopes = getScopes(accessToken);
   var identity = getIdentity(accessToken);
 
   var serviceData = {
     accessToken: accessToken,
     idToken: idToken,
-    expiresAt: expiresAt
-    // scope: scopes
+    expiresAt: expiresAt,
+    scope: scopes
   };
 
   var fields = _.pick(identity, Rs.whitelistedFields);
@@ -33,7 +32,7 @@ OAuth.registerService('rs', 2, null, function(query) {
 
   return {
     serviceData: serviceData,
-    options: {profile: {email: identity.username}}
+    options: {profile: {name: identity.name, email: identity.email}}
   };
 });
 
@@ -49,7 +48,7 @@ var getTokens = function (query) {
   var response;
   try {
     response = HTTP.post(
-      "https://passaporte.redesustentabilidade.net/oauth/token", {params: {
+      "https://passaporte.redesustentabilidade.org.br/oauth/token", {params: {
         code: query.code,
         client_id: config.clientId,
         client_secret: OAuth.openSecret(config.secret),
@@ -76,7 +75,7 @@ var getTokens = function (query) {
 var getIdentity = function (accessToken) {
   try {
     return HTTP.get(
-      "https://passaporte.redesustentabilidade.net/user",
+      "https://passaporte.redesustentabilidade.org.br/api/userinfo",
       {params: {access_token: accessToken}}).data;
   } catch (err) {
     throw _.extend(new Error("Failed to fetch identity from Rs. " + err.message),
@@ -84,16 +83,16 @@ var getIdentity = function (accessToken) {
   }
 };
 
-// var getScopes = function (accessToken) {
-//   try {
-//     return HTTP.get(
-//       "https://www.googleapis.com/oauth2/v1/tokeninfo",
-//       {params: {access_token: accessToken}}).data.scope.split(' ');
-//   } catch (err) {
-//     throw _.extend(new Error("Failed to fetch tokeninfo from Rs. " + err.message),
-//                    {response: err.response});
-//   }
-// };
+var getScopes = function (accessToken) {
+  try {
+    return HTTP.get(
+      "https://passaporte.redesustentabilidade.org.br/api/userinfo",
+      {params: {access_token: accessToken}}).data.scope.split(' ');
+  } catch (err) {
+    throw _.extend(new Error("Failed to fetch tokeninfo from Rs. " + err.message),
+                   {response: err.response});
+  }
+};
 
 Rs.retrieveCredential = function(credentialToken, credentialSecret) {
   return OAuth.retrieveCredential(credentialToken, credentialSecret);

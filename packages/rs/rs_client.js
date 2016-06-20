@@ -1,6 +1,6 @@
 Rs = {};
 
-// Request Rs credentials for the user
+// Request Google credentials for the user
 // @param options {optional}
 // @param credentialRequestCompleteCallback {Function} Callback function to call on
 //   completion. Takes one argument, credentialToken on success, or Error on
@@ -63,11 +63,11 @@ Rs.requestCredential = function (options, credentialRequestCompleteCallback) {
   _.extend(loginUrlParameters, {
     "response_type": "code",
     "client_id":  config.clientId,
-    // "scope": scope.join(' '), // space delimited
-    "redirect_uri": OAuth._redirectUri('rs', config)
-    // "state": OAuth._stateParam(loginStyle, credentialToken, options.redirectUrl)
+    "scope": scope.join(' '), // space delimited
+    "redirect_uri": OAuth._redirectUri('rs', config),
+    "state": OAuth._stateParam(loginStyle, credentialToken, options.redirectUrl)
   });
-  var loginUrl = 'https://passaporte.redesustentabilidade.net/oauth/authorization?' +
+  var loginUrl = 'https://passaporte.redesustentabilidade.org.br/dialog/authorize?' +
     _.map(loginUrlParameters, function(value, param){
       return encodeURIComponent(param) + '=' + encodeURIComponent(value);
     }).join("&");
