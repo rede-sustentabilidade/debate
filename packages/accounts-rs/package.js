@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Login service for Passaporte Rede Sustentabilidade accounts",
-  version: "0.0.1"
+  version: "0.0.2"
 });
 
 Package.onUse(function(api) {
